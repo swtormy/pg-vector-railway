@@ -1,13 +1,22 @@
-FROM ghcr.io/railwayapp-templates/postgres-ssl:15
+FROM postgres:16
 
 RUN apt-get update && apt-get install -y \
-    git \
-    gcc \
     make \
-    postgresql-server-dev-15 \
+    gcc \
+    git \
+    postgresql-server-dev-16 \
  && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/pgvector/pgvector.git /pgvector
 WORKDIR /pgvector
 RUN make && make install
+
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
+ENV POSTGRES_DB=mydb
+
+VOLUME /var/lib/postgresql/data
+
+EXPOSE 5432
+
 
